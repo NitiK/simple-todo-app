@@ -1,0 +1,33 @@
+<md-dialog aria-label="Mango (Fruit)" >
+  <form>
+    <md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2>{{course.id}}</h2>
+        <span flex></span>
+        <md-button class="md-icon-button" ng-click="cancel()">
+          <md-icon md-svg-src="src/image/ic_close_black_24px.svg" aria-label="Close dialog"></md-icon>
+        </md-button>
+      </div>
+    </md-toolbar>
+    <md-dialog-content style="max-width:800px;max-height:810px;" >
+      <md-tabs md-dynamic-height md-border-bottom >
+        <md ng-repeat="sec in sec" md-tab label={{sec.id}}  >
+          <md-content class="md-padding">
+            <img src="src/image/Teacher/{{sec.instructors[0]}}.jpg" alt="" class="" >
+            <p>Intructor : {{sec.instructors[0]}}</p>
+            <p>Date : {{sec.date}}</p>
+            <p>Room : {{sec.location}}</p>
+            <p>Credit: {{course.credit.total}}</p>
+            <p>Description: {{course.description.en}}</p>
+            <div class="progress">
+                <div class="determinate" style="width: {{getPercent(sec.enrolled,sec.accept)}}%"></div>
+            </div>
+            <p>{{sec.enrolled}} / {{sec.accept}}</p>
+             <md-button ng-click="answer(sec)" style="margin-right:20px;" class="md-raised">Enroll</md-button>
+          </md-content>
+        </md-tab>
+      </md-tabs>
+    </md-dialog-content>
+   
+  </form>
+</md-dialog>

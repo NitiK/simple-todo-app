@@ -4,12 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start" : "http-server",
+    "start": "http-server",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "angular": "^1.5.5"
+    "angular": "^1.5.5",
+    "angular-material": "^1.0.8"
   }
 }

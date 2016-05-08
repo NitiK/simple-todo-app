@@ -1,0 +1,24 @@
+<md-dialog aria-label="Mango (Fruit)"  ng-cloak>
+  <form>
+    <md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2>JSON</h2>
+        <span flex></span>
+        <md-button class="md-icon-button" ng-click="cancel()">
+          <md-icon md-svg-src="src/image/ic_close_black_24px.svg" aria-label="Close dialog"></md-icon>
+        </md-button>
+      </div>
+    </md-toolbar>
+    <md-dialog-content>
+      <div class="md-dialog-content">
+        <pre>{{regis}}</pre>
+      </div>
+    </md-dialog-content>
+    <md-dialog-actions layout="row">
+      <span flex></span>
+      <md-button ng-click="answer('not useful')">
+       Got it!!
+      </md-button>
+    </md-dialog-actions>
+  </form>
+</md-dialog>
