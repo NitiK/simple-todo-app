@@ -149,7 +149,7 @@ angular.module('todoApp', ['ui.router', 'ngMaterial'])
       // Appending dialog to document.body to cover sidenav in docs app
         var confirm = $mdDialog.confirm()
               .title(course.id +" : " +course.name.en)
-              .textContent('Description : '+ course.description.en)
+              .textContent('Are you sure you want to drop this course?')
               .ariaLabel('Lucky day')
               .targetEvent(ev)
               .ok('Drop')

@@ -3,7 +3,6 @@
     <div class="nav-wrapper">
       <a href="#" class="brand-logo right"><img src="src/image/logo_iup.png"></a>
       <ul id="nav-mobile" class="left hide-on-med-and-down">
-        <li><a href="#/home2">Home</a></li>
         <li><a href="#/home">Registeration</a></li>
         <li><a href="#/changepage">Profile</a></li>
       </ul>
@@ -22,7 +21,7 @@
  </div>
 
 <ul class="collection">
-    <li ng-repeat="course in myData.courses " class="collection-item avatar">
+    <li ng-repeat="course in myData.courses | filter:search " class="collection-item avatar">
       <img src="src/image/me.jpg" alt="" class="circle">
       <span class="title">{{course.id}} {{course.name.en}}</span>
       <p>{{course.location}}<br>
