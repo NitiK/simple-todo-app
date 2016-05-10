@@ -5,7 +5,7 @@
       <a href="#" class="brand-logo right"><img src="src/image/logo_iup.png"></a>
       <ul id="nav-mobile" class="left hide-on-med-and-down">
         <li><a href="#/home">Registeration</a></li>
-        <li><a href="#/changepage">Profile</a></li>
+        <li><a href="#/changepage">Report</a></li>
       </ul>
     </div>
   </nav>
@@ -22,13 +22,26 @@
   </div>
 
     <section layout="row" layout-sm="column" layout-align="end end" layout-wrap>
-      <md-button class="md-raised md-primary" ng-click="showAdvanced($event,myData)" >Export</md-button>
+      <div class="chip">
+          <img src="src/image/me.jpg" alt="Contact Person">
+          {{myData.name}}
+      </div>
     </section>
+
+    <section layout="row" layout-sm="column" layout-align="end end" layout-wrap>
+
+      <md-button class="md-raised md-primary" ng-click="showAdvanced($event,myData)" >Export</md-button>
+      <md-button class="md-raised" ng-click="showActionToast()">
+        Log out
+      </md-button>
+      
+    </section>
+
 
 <div class="row">
   <form class="col s6">
   <ul class="collection">
-    <li ng-repeat="course in todoList.courseList | filter:search track by course.id" class="collection-item avatar">
+    <li ng-repeat="course in courseList | filter:search track by course.id" class="collection-item avatar">
       <img src="src/image/me.jpg" alt="" class="circle">
       <span class="title">{{course.id}}</span>
       <p>{{course.name.en}}<br>

@@ -1,5 +1,5 @@
 angular.module('todoApp', ['ui.router', 'ngMaterial'])
-  .controller('TodoListController', function ($http, $rootScope, $scope, $mdDialog, TodoListService, $mdMedia) {
+  .controller('TodoListController', function ($http, $rootScope, $scope, $mdDialog, TodoListService, $mdMedia, $mdToast) {
     var todoList = this
     todoList.todos = [
       {text: 'learn angular', done: true},
@@ -7,6 +7,17 @@ angular.module('todoApp', ['ui.router', 'ngMaterial'])
     todoList.regisList = TodoListService.get();
 
     $('.modal-trigger').leanModal();
+
+    todoList.user = {
+      firstName: '',
+      lastName: '',
+      id: '',
+      password: ''
+    };
+
+    ///////////////////////////
+
+    ///////////////////////////
 
     todoList.addTodo = function () {
       todoList.todos.push({text: todoList.todoText, done: false})
@@ -31,9 +42,9 @@ angular.module('todoApp', ['ui.router', 'ngMaterial'])
 
     todoList.getCourse = function () {
       $http.get('https://whsatku.github.io/skecourses/combined.json').success(function(data){
-        todoList.courseList = $.map(data, function(value, index) {return [value];});
+        $rootScope.courseList = $.map(data, function(value, index) {return [value];});
       
-      angular.forEach(todoList.courseList, function (todo) {
+      angular.forEach($rootScope.courseList, function (todo) {
         //console.log(todo.id)
           $http.get('https://whsatku.github.io/skecourses/sections/' + todo.id + '.json').success(function(data){
                   //console.log(todo)
@@ -46,17 +57,17 @@ angular.module('todoApp', ['ui.router', 'ngMaterial'])
 
 
       });
-
-      $http.get('http://52.37.98.127:3000/v1/5610545013/5610545013?pin=1234').success(function(data){
+      console.log($rootScope.account)
+      $http.get('http://52.37.98.127:3000/v1/5610545013/' + $rootScope.account + '?pin=1234').success(function(data){
         $rootScope.myData = data;
 
         var p = $rootScope.myData.courses;
         for (var x in p) {
           if (p.hasOwnProperty(x)) {
-            for (var y in todoList.courseList) {
-              if (todoList.courseList.hasOwnProperty(y)) {
-                if(p[x].id == todoList.courseList[y].id){
-                  todoList.courseList.splice(y, 1);
+            for (var y in $rootScope.courseList) {
+              if ($rootScope.courseList.hasOwnProperty(y)) {
+                if(p[x].id == $rootScope.courseList[y].id){
+                  $rootScope.courseList.splice(y, 1);
                 }
               }
             }
@@ -67,12 +78,11 @@ angular.module('todoApp', ['ui.router', 'ngMaterial'])
 
       
     }
-    todoList.getCourse();
 
     
 
     todoList.addCourse = function (course,sec) {
-        todoList.courseList.splice(todoList.courseList.indexOf(course), 1);
+        $rootScope.courseList.splice($rootScope.courseList.indexOf(course), 1);
 
         var courseObj = {
           "id" : course.id,
@@ -84,9 +94,12 @@ angular.module('todoApp', ['ui.router', 'ngMaterial'])
           "credit": course.credit,
           "description": course.description,
         }
+        console.log($rootScope.account);
         $rootScope.myData.courses.push(courseObj);
-        //console.log("kongkongkong")
-        //console.log(courseObj)
+
+        if($rootScope.account == "5610545048")
+        var sendingData = {"5610545048" : $rootScope.myData}
+        else if($rootScope.account == "5610545013")
         var sendingData = {"5610545013" : $rootScope.myData}
 
         $http.post('http://52.37.98.127:3000/v1/5610545013?pin=1234', sendingData).success(function(data){
@@ -97,12 +110,55 @@ angular.module('todoApp', ['ui.router', 'ngMaterial'])
 
     todoList.dropCourse = function (course) {
         $rootScope.myData.courses.splice($rootScope.myData.courses.indexOf(course), 1);
+
+
+        if($rootScope.account == "5610545048")
+        var sendingData = {"5610545048" : $rootScope.myData}
+        else if($rootScope.account == "5610545013")
         var sendingData = {"5610545013" : $rootScope.myData}
+
         $http.post('http://52.37.98.127:3000/v1/5610545013?pin=1234', sendingData).success(function(data){
         //console.log(data)
         todoList.getCourse();
         });
 
+    }
+
+    todoList.loginAccount = function (account,password) {
+      var str ;
+      var pass = false;
+      //console.log(account)
+      if(typeof account != 'undefined' && typeof password != 'undefined')
+      {
+          str = account;
+          $rootScope.password = password;
+          var a = account.substring(1, str.length);
+          $http.get('http://52.37.98.127:3000/v1/5610545013?pin=1234').success(function(data){
+            $rootScope.myData = data;
+
+          angular.forEach($rootScope.myData, function (todo) {
+            //console.log(todo.stdId)
+            if(todo.stdId == a){
+              $rootScope.account = a;
+              todoList.getCourse();
+              pass = true;
+            }
+
+          })
+
+          if(pass)
+          {
+            window.location.href = '#/home';
+          }
+          else{
+            alert("Incorrect account number, please try again...")
+          }
+
+        })
+
+          console.log($rootScope.account + " : " + $rootScope.password);
+
+      }
     }
 
     $scope.showAdvanced = function(ev,regis) {
@@ -185,6 +241,65 @@ angular.module('todoApp', ['ui.router', 'ngMaterial'])
 
     };
 
+    var last = {
+      bottom: false,
+      top: true,
+      left: false,
+      right: true
+    };
+  $scope.toastPosition = angular.extend({},last);
+  $scope.getToastPosition = function() {
+    sanitizePosition();
+    return Object.keys($scope.toastPosition)
+      .filter(function(pos) { return $scope.toastPosition[pos]; })
+      .join(' ');
+  };
+  function sanitizePosition() {
+    var current = $scope.toastPosition;
+    if ( current.bottom && last.top ) current.top = false;
+    if ( current.top && last.bottom ) current.bottom = false;
+    if ( current.right && last.left ) current.left = false;
+    if ( current.left && last.right ) current.right = false;
+    last = angular.extend({},current);
+  }
+  $scope.showCustomToast = function() {
+    $mdToast.show({
+      controller: 'ToastCtrl',
+      templateUrl: 'toast-template.html',
+      parent : $document[0].querySelector('#toastBounds'),
+      hideDelay: 6000,
+      position: $scope.getToastPosition()
+    });
+  };
+  $scope.showSimpleToast = function() {
+    $mdToast.show(
+      $mdToast.simple()
+        .textContent('Simple Toast!')
+        .position($scope.getToastPosition())
+        .hideDelay(3000)
+    );
+  };
+  $scope.showActionToast = function() {
+    var toast = $mdToast.simple()
+          .textContent('Click OK to log out!!')
+          .action('OK')
+          .highlightAction(false)
+          .position($scope.getToastPosition());
+    $mdToast.show(toast).then(function(response) {
+      if ( response == 'ok' ) {
+        window.location.href = '#/login';
+        $rootScope.account = "";
+      }
+    });
+  };
+
+
+  })
+
+  .controller('ToastCtrl', function($scope, $mdToast) {
+    $scope.closeToast = function() {
+      $mdToast.hide();
+    };
   })
 
   .service('TodoListService', function(){

@@ -1,0 +1,24 @@
+<div ng-controller="TodoListController as todoList">
+  <nav>
+    <div class="nav-wrapper">
+      <a href="#" class="brand-logo right"><img src="src/image/logo_iup.png"></a>
+      <ul id="nav-mobile" class="left hide-on-med-and-down">
+      </ul>
+    </div>
+  </nav>
+<div class="container">
+      <div class="row">
+        <div class="input-field col s12">
+          <input ng-model="account" id="account" type="text" class="validate">
+          <label for="account">Account No.</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col s12">
+          <input ng-model="password" id="password" type="password" class="validate">
+          <label for="password">Password</label>
+        </div>
+      </div>
+      <md-button class="md-raised md-primary"  ng-click=todoList.loginAccount(account,password) >LOGIN</md-button>
+</div>
+</div>
