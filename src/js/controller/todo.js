@@ -138,7 +138,7 @@ angular.module('todoApp', ['ui.router', 'ngMaterial'])
 
           angular.forEach($rootScope.myData, function (todo) {
             //console.log(todo.stdId)
-            if(todo.stdId == a){
+            if(todo.stdId == a ){
               $rootScope.account = a;
               todoList.getCourse();
               pass = true;
